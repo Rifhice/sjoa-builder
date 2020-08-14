@@ -1,6 +1,6 @@
 {
   "name": "sjoa-builder",
-  "version": "1.0.13",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "start": "tsc && node dist/index.js",
     "dev": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"nodemon\"",
     "prepare": "tsc",
-    "prepublishOnly": "npm test ",
+    "prepublishOnly": "npm test",
     "publish:patch": "npm version patch && npm publish --access public"
   },
   "keywords": [],
