@@ -1,14 +1,8 @@
 #!/usr/bin/env node
-import {
-  OpenApiBuilder,
-  OpenAPIObject,
-  PathsObject,
-  ReferenceObject,
-  SchemaObject,
-} from "openapi3-ts";
+import { OpenApiBuilder, OpenAPIObject, PathsObject } from "openapi3-ts";
 const glob = require("glob");
 const path = require("path");
-
+global.require = require;
 export const isAnObject = (value: any) =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
@@ -152,11 +146,7 @@ export const extractSchemaFromSchemaFiles = async (options: SchemasOptions) => {
 export const build = async (options: {
   baseStructure: OpenAPIObject;
   routes: RouteOptions;
-  schemas: {
-    globs: string[];
-    variableName?: string;
-    converter?: (rawData: any) => SchemaObject | ReferenceObject;
-  };
+  schemas: SchemasOptions;
 }): Promise<OpenAPIObject> => {
   if (!isAnObject(options)) throw new Error("Options should be an object");
 
