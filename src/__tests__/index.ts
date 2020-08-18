@@ -146,6 +146,9 @@ describe("formatBaseStructure", () => {
       },
       openapi: "3.0.0",
       paths: {},
+      components: {
+        schemas: {},
+      },
     };
     expect(utils.formatBaseStructure(validBaseStructure)).toEqual(
       validBaseStructure
@@ -159,6 +162,9 @@ describe("formatBaseStructure", () => {
       },
       openapi: "2.0.0",
       paths: {},
+      components: {
+        schemas: {},
+      },
     };
     expect(utils.formatBaseStructure(validBaseStructure)).toEqual({
       ...validBaseStructure,
@@ -174,6 +180,9 @@ describe("formatBaseStructure", () => {
       },
       openapi: "3.0.0",
       paths: {},
+      components: {
+        schemas: {},
+      },
     });
   });
   test("Should set default values", () => {
@@ -183,6 +192,9 @@ describe("formatBaseStructure", () => {
       },
       openapi: "2.0.0",
       paths: {},
+      components: {
+        schemas: {},
+      },
     };
     //@ts-ignore
     expect(utils.formatBaseStructure(validBaseStructure)).toEqual({
@@ -192,6 +204,9 @@ describe("formatBaseStructure", () => {
       },
       openapi: "3.0.0",
       paths: {},
+      components: {
+        schemas: {},
+      },
     });
   });
 });
@@ -301,6 +316,7 @@ describe("validateRoutesOptions", () => {
     ).toThrowError(Error);
   });
 });
+
 describe("validateSchemasOptions", () => {
   test("Should throw if invalid parameters", () => {
     expect(() =>
@@ -406,6 +422,7 @@ describe("validateSchemasOptions", () => {
     ).toThrowError(Error);
   });
 });
+
 describe("extractPathsFromRouteFiles", () => {
   test("Should return non converted route", async (done) => {
     //@ts-ignore
@@ -451,7 +468,7 @@ describe("extractPathsFromRouteFiles", () => {
   });
 });
 
-describe("extractPathsFromRouteFiles", () => {
+describe("extractSchemaFromSchemaFiles", () => {
   test("Should return non converted route", async (done) => {
     //@ts-ignore
     utils.getFilesFromPaths = jest
@@ -459,11 +476,11 @@ describe("extractPathsFromRouteFiles", () => {
       .mockResolvedValue(["my file", "my file 2"]);
     //@ts-ignore
     utils.getExportedMembersFromFile = jest.fn().mockReturnValue({
-      route: {
+      schema: {
         salut: { hey: "mdr" },
       },
     });
-    const paths = await utils.extractPathsFromRouteFiles({
+    const paths = await utils.extractSchemaFromSchemaFiles({
       globs: [],
     });
     expect(paths).toEqual([
@@ -479,11 +496,11 @@ describe("extractPathsFromRouteFiles", () => {
       .mockResolvedValue(["my file", "my file 2"]);
     //@ts-ignore
     utils.getExportedMembersFromFile = jest.fn().mockReturnValue({
-      route: {
+      schema: {
         salut: { hey: "mdr" },
       },
     });
-    const paths = await utils.extractPathsFromRouteFiles({
+    const paths = await utils.extractSchemaFromSchemaFiles({
       globs: [],
       //@ts-ignore
       converter: (value) => ({ mdr: "lol" }),

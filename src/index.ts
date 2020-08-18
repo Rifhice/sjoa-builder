@@ -73,6 +73,7 @@ export const formatBaseStructure = (
   if (!copy.info.title) copy.info.title = defaultTitle;
   if (!copy.info.version) copy.info.version = defaultVersion;
   if (!copy.paths) copy.paths = defaultPaths;
+  copy.components = { schemas: {} };
   return copy;
 };
 
@@ -132,6 +133,22 @@ export const extractPathsFromRouteFiles = async (options: RouteOptions) => {
   }, []);
 };
 
+export const extractSchemaFromSchemaFiles = async (options: SchemasOptions) => {
+  const { globs, variableName, converter } = options;
+  const schemaPaths = await getFilesFromPaths(globs);
+  return schemaPaths.reduce((acc, schemaPath) => {
+    const fileContent = getExportedMembersFromFile(schemaPath);
+
+    let routeDoc = getFromFile(fileContent, variableName || "schema");
+    if (!routeDoc) return acc;
+
+    if (typeof converter === "function") routeDoc = converter(routeDoc);
+
+    acc.push(Object.entries(routeDoc)[0]);
+    return acc;
+  }, []);
+};
+
 export const build = async (options: {
   baseStructure: OpenAPIObject;
   routes: RouteOptions;
@@ -157,6 +174,11 @@ export const build = async (options: {
   // Add paths to documentation
   (await extractPathsFromRouteFiles(routes)).forEach(([path, route]) =>
     doc.addPath(path, { ...route })
+  );
+
+  // Add schema to documentation
+  (await extractSchemaFromSchemaFiles(routes)).forEach(([path, schema]) =>
+    doc.addSchema(path, { ...schema })
   );
 
   return doc.getSpec();
