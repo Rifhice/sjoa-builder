@@ -167,7 +167,7 @@ export const build = async (options: {
   );
 
   // Add schema to documentation
-  (await extractSchemaFromSchemaFiles(routes)).forEach(([path, schema]) =>
+  (await extractSchemaFromSchemaFiles(schemas)).forEach(([path, schema]) =>
     doc.addSchema(path, { ...schema })
   );
 
